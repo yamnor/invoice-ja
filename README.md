@@ -1,6 +1,6 @@
 # invoice-ja
 
-Typst で日本語の **請求書 / 見積書 / 納品書** を作成できるテンプレートです。  
+Typst で日本語の **見積書 / 請求書 / 納品書** を作成できるテンプレートです。  
 
 ![Sample Invoice](https://i.gyazo.com/9be4bb8d0751c8fa17fce1cc448edc1b.png)
 
@@ -30,7 +30,7 @@ cp example-invoice-ja.typ my-invoice.typ
 
 `my-invoice.typ` を編集し、次の項目を差し替えてください。
 
-- `doc_type` - 書類種別（`"請求書"` / `"見積書"` / `"納品書"`）
+- `doc_type` - 書類種別（`"見積書"` / `"請求書"` / `"納品書"`）
 - `recipient` - 宛先情報
 - `issue_date` - 発行日
 - `items` - 明細（品目・単価・数量）
@@ -82,7 +82,7 @@ typst compile my-invoice.typ
 )
 ```
 
-- `doc_type`: `"請求書"` / `"見積書"` / `"納品書"`
+- `doc_type`: `"見積書"` / `"請求書"` / `"納品書"`
 - `recipient`: `(name, honorific, address)`
 - `issue_date`: `datetime(...)`
 - `items`: `((name, price, qty), ...)`
@@ -94,8 +94,8 @@ typst compile my-invoice.typ
 
 ## 書類種別ごとの違い
 
-- `請求書`: 消費税と振込先を表示
 - `見積書`: 消費税を表示、振込先は非表示
+- `請求書`: 消費税と振込先を表示
 - `納品書`: 消費税と振込先を非表示
 
 ## フォントに関する注意
