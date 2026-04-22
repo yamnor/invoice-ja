@@ -11,5 +11,4 @@
 .cursorignore
 
 # Test
-template/*.pdf
 template/preview.typ
