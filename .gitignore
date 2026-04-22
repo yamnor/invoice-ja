@@ -1,6 +1,5 @@
 # Typst build outputs
 *.pdf
-*.png
 *.svg
 
 # macOS

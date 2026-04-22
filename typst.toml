@@ -1,0 +1,17 @@
+[package]
+name = "invoice-ja"
+version = "0.1.0"
+compiler = "0.11.0"
+entrypoint = "lib.typ"
+authors = ["yamnor <https://nory.jp/>"]
+repository = "https://github.com/yamnor/invoice-ja"
+license = "MIT"
+description = "Japanese invoices, quotations, and delivery notes."
+keywords = ["invoice", "japanese", "quotation", "delivery-note"]
+categories = ["layout", "office"]
+disciplines = []
+
+[template]
+path = "template"
+entrypoint = "main.typ"
+thumbnail = "thumbnail.png"

@@ -1,5 +1,7 @@
 # invoice-ja
 
+A Typst template for generating Japanese estimates, invoices, and delivery notes.
+
 Typst で日本語の **見積書 / 請求書 / 納品書** を作成できるテンプレートです。  
 
 ![Sample Invoice](https://i.gyazo.com/9be4bb8d0751c8fa17fce1cc448edc1b.png)
@@ -25,7 +27,7 @@ Typst で日本語の **見積書 / 請求書 / 納品書** を作成できる�
 ### 1) 自分用の入力ファイルを作る
 
 ```bash
-cp example-invoice-ja.typ my-invoice.typ
+cp template/main.typ my-invoice.typ
 ```
 
 `my-invoice.typ` を編集し、次の項目を差し替えてください。

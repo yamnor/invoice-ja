@@ -1,4 +1,4 @@
-#import "invoice-ja.typ": invoice
+#import "@preview/invoice-ja:0.1.0": invoice
 
 #show: invoice(
   "請求書",
