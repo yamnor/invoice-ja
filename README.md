@@ -1,9 +1,8 @@
-# typst-template-invoice
+# invoice-ja
 
 Typst で日本語の **請求書 / 見積書 / 納品書** を作成できるテンプレートです。  
-1つの関数 `invoice(...)` にデータを渡すだけで、PDF を出力できます。
 
-![Sample Invoice](https://i.gyazo.com/9cd5901168aa2c40f9e7b81b3321aa22.png)
+![Sample Invoice](https://i.gyazo.com/9be4bb8d0751c8fa17fce1cc448edc1b.png)
 
 ## できること
 
@@ -23,15 +22,7 @@ Typst で日本語の **請求書 / 見積書 / 納品書** を作成できる�
 
 ## クイックスタート
 
-### 1) サンプルをそのまま PDF 化
-
-```bash
-typst compile example-invoice-ja.typ
-```
-
-`example-invoice-ja.pdf` が生成されます。
-
-### 2) 自分用の入力ファイルを作る
+### 1) 自分用の入力ファイルを作る
 
 ```bash
 cp example-invoice-ja.typ my-invoice.typ
@@ -48,11 +39,13 @@ cp example-invoice-ja.typ my-invoice.typ
 - `remarks` - 備考（任意）
 - `document_number` - 書類番号（任意）
 
-### 3) 編集したファイルを PDF 化
+### 2) 編集したファイルを PDF 化
 
 ```bash
 typst compile my-invoice.typ
 ```
+
+`my-invoice.pdf` が生成されます。
 
 ## 使い方（最小例）
 
