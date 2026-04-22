@@ -1,0 +1,7 @@
+# Typst build outputs
+*.pdf
+*.png
+*.svg
+
+# macOS
+.DS_Store
