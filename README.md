@@ -4,33 +4,92 @@ A Typst template for generating Japanese estimates, invoices, and delivery notes
 
 Typst で日本語の **見積書 / 請求書 / 納品書** を作成できるテンプレートです。  
 
-![Sample Invoice](https://i.gyazo.com/9be4bb8d0751c8fa17fce1cc448edc1b.png)
+![Sample Invoice](https://i.gyazo.com/3bc666298b94dc37c66ca9a35a33c7b8.png)
 
 ## できること
 
-- 1つのテンプレートで書類種別を切り替え（`請求書` / `見積書` / `納品書`）
+- 1つのテンプレートで書類種別を切り替え（`見積書` / `請求書` / `納品書`）
 - 明細から小計・消費税・合計を自動計算
 - 発行元・宛先・振込先・備考をパラメータで差し替え
-
-## ファイル構成
-
-- `invoice-ja.typ` - テンプレート本体（`invoice` 関数を定義）
-- `example-invoice-ja.typ` - サンプルデータを渡して表示する実行例
 
 ## 必要環境
 
 - [Typst](https://typst.app/) 0.11 以上
 - 日本語フォント（デフォルト設定: `Hiragino Sans`）
 
-## クイックスタート
+## ローカルパッケージとしてインストールして使う
 
-### 1) 自分用の入力ファイルを作る
+Typst は、パッケージを **データディレクトリ** 下の  
+`{data-dir}/typst/packages/{namespace}/{name}/{version}/` に置くと import できる仕組みです（[Typst Packages の README（Local packages）](https://github.com/typst/packages/blob/main/README.md)）。
+
+`{data-dir}` の目安は次のとおりです。
+
+| OS | 既定の `{data-dir}`（例） |
+| --- | --- |
+| Linux | `$XDG_DATA_HOME` があればそこ、なければ `~/.local/share` |
+| macOS | `~/Library/Application Support` |
+| Windows | `%APPDATA%`（例: `C:\Users\<ユーザー名>\AppData\Roaming`） |
+
+実際のパスは環境によって異なるので、端末で `typst info` を実行し、**Package path** を確認してください。
+
+このリポジトリの **ルート一式**（`typst.toml`・`lib.typ`・`invoice-ja.typ`・`template/` など）を、次のディレクトリにコピーします。
+
+`{data-dir}/typst/packages/local/invoice-ja/{version}/`
+
+`version` は `typst.toml` の `[package].version`（現状 `0.1.0`）と **必ず一致** させてください。`local` 名前空間に置くと `#import "@local/invoice-ja:0.1.0"` で読み込め、`template/main.typ` と同じ import 文のまま `typst init` やコンパイルが通ります（データディレクトリ側のパッケージはキャッシュより優先されます）。
+
+以下の `0.1.0` は、インストールしたバージョンに合わせて読み替えてください。
+
+### Linux（Bash の例）
+
+次の `rsync` は **このリポジトリをクローンしたディレクトリのルート**で実行してください。
 
 ```bash
-cp template/main.typ my-invoice.typ
+VERSION=0.1.0
+DEST="${XDG_DATA_HOME:-$HOME/.local/share}/typst/packages/local/invoice-ja/$VERSION"
+mkdir -p "$DEST"
+rsync -a --exclude '.git' ./ "$DEST/"
 ```
 
-`my-invoice.typ` を編集し、次の項目を差し替えてください。
+### macOS（Bash / zsh の例）
+
+リポジトリのルートで実行してください。
+
+```bash
+VERSION=0.1.0
+DEST="$HOME/Library/Application Support/typst/packages/local/invoice-ja/$VERSION"
+mkdir -p "$DEST"
+rsync -a --exclude '.git' ./ "$DEST/"
+```
+
+### Windows（PowerShell の例）
+
+リポジトリのルートで実行してください。
+
+```powershell
+$Version = "0.1.0"
+$Dest = Join-Path $env:APPDATA "typst\packages\local\invoice-ja\$Version"
+New-Item -ItemType Directory -Force -Path $Dest | Out-Null
+Copy-Item -Path (Get-Item .).FullName\* -Destination $Dest -Recurse -Force
+# .git をコピーしたくない場合は、エクスプローラーで除外するか robocopy 等を利用してください。
+```
+
+### インストール後の手順（`typst init`）
+
+1. 上記のいずれかでパッケージを配置する。
+2. 作業用の **空のディレクトリ** で次を実行する。
+
+```bash
+typst init "@local/invoice-ja:0.1.0"
+```
+
+3. `invoice-ja` サブディレクトリに移動する。
+
+```bash
+cd invoice-ja
+```
+
+4. `main.typ` の `#show: invoice_ja(...)` の引数を、自分の内容に合わせて書き換える。
 
 - `doc_type` - 書類種別（`"見積書"` / `"請求書"` / `"納品書"`）
 - `recipient` - 宛先情報
@@ -41,20 +100,24 @@ cp template/main.typ my-invoice.typ
 - `remarks` - 備考（任意）
 - `document_number` - 書類番号（任意）
 
-### 2) 編集したファイルを PDF 化
+5. PDF にする。
 
 ```bash
-typst compile my-invoice.typ
+typst compile main.typ
 ```
 
-`my-invoice.pdf` が生成されます。
+`main.pdf` が生成されます。編集しながらプレビューする場合は `typst watch main.typ` も使えます。
 
-## 使い方（最小例）
+`typst init` を使わず既存の `.typ` から使う場合は、先頭で `#import "@local/invoice-ja:0.1.0": invoice_ja` と書きます（バージョンはインストールしたものに合わせる）。関数名はパッケージ名に合わせて `invoice_ja` です（Typst では `invoice-ja(...)` が減算と解釈されるため、ハイフンではなくアンダースコアにしています）。
+
+## 使い方
+
+`local` 名前空間にインストール済みの場合の例です。
 
 ```typst
-#import "invoice-ja.typ": invoice
+#import "@local/invoice-ja:0.1.0": invoice_ja
 
-#show: invoice(
+#show: invoice_ja(
   "請求書",
   (
     name: "株式会社サンプル",
@@ -68,10 +131,10 @@ typst compile my-invoice.typ
 )
 ```
 
-## `invoice` 関数のシグネチャ
+## `invoice_ja` 関数のシグネチャ
 
 ```typst
-#show: invoice(
+#show: invoice_ja(
   doc_type,
   recipient,
   issue_date,
@@ -107,7 +170,11 @@ typst compile my-invoice.typ
 
 ## よくある調整ポイント
 
-- タイトルや色味を変更したい: `invoice-ja.typ` の `brand` / `brand-soft` を編集
+- タイトルや濃淡を変更したい: `invoice-ja.typ` の `brand` / `brand-soft` / `line-soft`（いずれも `luma(...)`）を編集
 - 余白を変更したい: `set page(...)` の `margin` を編集
 - 文字サイズを変更したい: `set text(...)` の `size` を編集
 - 備考欄や振込先の見た目を変えたい: `rect(...)` の `inset` / `radius` / `stroke` を編集
+
+## ライセンス
+
+[LICENSE](LICENSE) を参照してください（MIT）。

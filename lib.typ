@@ -1,1 +1,1 @@
-#import "invoice-ja.typ": invoice
+#import "invoice-ja.typ": invoice_ja

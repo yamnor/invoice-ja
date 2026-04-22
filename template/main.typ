@@ -1,6 +1,6 @@
-#import "@preview/invoice-ja:0.1.0": invoice
+#import "@local/invoice-ja:0.1.0": invoice_ja
 
-#show: invoice(
+#show: invoice_ja(
   "請求書",
   (
     name: "サンプル商事株式会社",

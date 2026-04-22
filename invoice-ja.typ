@@ -2,9 +2,10 @@
 #let font-sans = (
   "Hiragino Sans",
 )
-#let brand = rgb("#2F4858")
-#let brand-soft = rgb("#EEF3F6")
-#let line-soft = luma(210)
+// グレースケール（濃淡は luma(0)=黒 … luma(255)=白）
+#let brand = luma(32)
+#let brand-soft = luma(245)
+#let line-soft = luma(175)
 
 #let pad-3(n) = {
   let s = str(n)
@@ -69,8 +70,8 @@
   }
 }
 
-// テンプレート関数の定義
-#let invoice(
+// テンプレート関数（`invoice-ja(...)` は減算と解釈されるため識別子は `invoice_ja`）
+#let invoice_ja(
   doc_type,
   recipient,
   issue_date,
@@ -130,7 +131,7 @@
       #v(0.9em)
       #rect(
         inset: 8pt,
-        radius: 3pt,
+        radius: 0pt,
         fill: brand-soft,
         stroke: 0.6pt + line-soft,
       )[
@@ -145,7 +146,7 @@
       #v(1em)
       #rect(
         inset: 9pt,
-        radius: 3pt,
+        radius: 0pt,
         stroke: 0.8pt + line-soft,
         fill: white,
       )[
@@ -207,7 +208,7 @@
     #rect(
       width: 100%,
       inset: 10pt,
-      radius: 3pt,
+      radius: 0pt,
       fill: white,
       stroke: 0.7pt + line-soft,
     )[
@@ -221,7 +222,7 @@
     #v(1.2em)
     #rect(
       inset: 10pt,
-      radius: 3pt,
+      radius: 0pt,
       fill: brand-soft,
       stroke: 0.7pt + line-soft,
     )[
