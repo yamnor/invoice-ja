@@ -4,7 +4,7 @@ A Typst template for generating Japanese estimates, invoices, and delivery notes
 
 Typst で日本語の **見積書 / 請求書 / 納品書** を作成できるテンプレートです。  
 
-![Sample Invoice](https://i.gyazo.com/3bc666298b94dc37c66ca9a35a33c7b8.png)
+![Sample Invoice](https://i.gyazo.com/15846bba67782a8a01f225dc5adca7e8.png)
 
 ## できること
 
@@ -148,11 +148,14 @@ typst compile main.typ
 ```
 
 - `doc_type`: `"見積書"` / `"請求書"` / `"納品書"`
-- `recipient`: `(name, honorific, address)`
+- `recipient`: `(name, honorific, address)`。`address` は `none` で省略可。
 - `issue_date`: `datetime(...)`
 - `items`: `((name, price, qty), ...)`
 - `tax_rate`: 消費税率（例: `0.1`）
-- `issuer`: `(label, company, name, postal_code, address)`
+- `issuer`: 差出し欄。`(label, company, name, postal_code, address, custom)` 形式の辞書。
+  - `name` / `postal_code` / `address` は `none` のときその行を出さない（住所を書かない請求書にも対応）。
+  - `address` は複数行にしたい場合、`content` で渡す（`[#linebreak()]` や `\\` で改行）。
+  - `custom` を **辞書に含め、かつ `none` でない content** にすると、差出しボックス内はその内容だけを表示する（登録番号・電話・独自ブロックなど、固定フィールドでは足りないとき用）。
 - `bank`: `(bank_name, branch_name, account_type, account_number, account_name)` または `none`
 - `remarks`: 備考。`none` で非表示
 - `document_number`: 文字列。`none` の場合は日付ベースで自動採番

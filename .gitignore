@@ -4,3 +4,12 @@
 
 # macOS
 .DS_Store
+
+# Development
+.vscode
+.cursor
+.cursorignore
+
+# Test
+template/*.pdf
+template/preview.typ

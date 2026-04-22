@@ -35,7 +35,7 @@
     (
       title: "見積書",
       intro: "下記の通りお見積り申し上げます。",
-      amount-label: "お見積金額",
+      amount-label: "お見積金額（税込）",
       date-label: "見積日",
       no-label: "見積番号",
       no-prefix: "EST-",
@@ -47,7 +47,7 @@
     (
       title: "納品書",
       intro: "下記の通り納品いたしました。",
-      amount-label: "納品合計",
+      amount-label: "納品合計（税込）",
       date-label: "納品日",
       no-label: "納品書番号",
       no-prefix: "DEL-",
@@ -59,7 +59,7 @@
     (
       title: "請求書",
       intro: "下記の通りご請求申し上げます。",
-      amount-label: "ご請求金額",
+      amount-label: "ご請求金額（税込）",
       date-label: "発行日",
       no-label: "請求書番号",
       no-prefix: "INV-",
@@ -83,6 +83,8 @@
     name: none,
     postal_code: none,
     address: none,
+    // `custom` に content を渡すと、差出し欄はその内容だけを表示（自由レイアウト用）
+    custom: none,
   ),
   bank: none,
   remarks: none,
@@ -150,16 +152,21 @@
         stroke: 0.8pt + line-soft,
         fill: white,
       )[
-        #align(left)[#text(size: 9.5pt, fill: brand)[#issuer.label]]
-        #v(0.25em)
-        #align(left)[#text(size: 10.5pt, weight: "semibold")[#issuer.company]]
-        #if issuer.name != none [#align(left)[#text(size: 10.5pt)[#issuer.name]]]
-        #if issuer.postal_code != none [
+        #if issuer.at("custom", default: none) != none [
+          #set align(left)
+          #issuer.custom
+        ] else [
+          #align(left)[#text(size: 9.5pt, fill: brand)[#issuer.label]]
           #v(0.25em)
-          #align(left)[#text(size: 10pt, fill: luma(70))[〒#issuer.postal_code]]
-        ]
-        #if issuer.address != none [
-          #align(left)[#text(size: 10pt, fill: luma(70))[#issuer.address]]
+          #align(left)[#text(size: 10.5pt, weight: "semibold")[#issuer.company]]
+          #if issuer.at("name", default: none) != none [#align(left)[#text(size: 10.5pt)[#issuer.name]]]
+          #if issuer.at("postal_code", default: none) != none [
+            #v(0.25em)
+            #align(left)[#text(size: 10pt, fill: luma(70))[〒#issuer.postal_code]]
+          ]
+          #if issuer.at("address", default: none) != none [
+            #align(left)[#text(size: 10pt, fill: luma(70))[#issuer.address]]
+          ]
         ]
       ]
     ]
@@ -172,14 +179,20 @@
     columns: (1fr, auto, auto, auto),
     inset: 6pt,
     stroke: 0.7pt + line-soft,
-    fill: (x, y) => if y == 0 { brand-soft } else { none },
-    align: (left, right, right, right),
+    fill: (x, y) => if y == 0 { luma(0) } else { none },
+    align: (x, y) => if y == 0 {
+      center
+    } else if x == 0 {
+      left
+    } else {
+      right
+    },
 
-    // ヘッダー行
-    [#align(left)[#text(weight: "semibold", fill: brand)[品目]]],
-    [#align(left)[#text(weight: "semibold", fill: brand)[単価]]],
-    [#align(left)[#text(weight: "semibold", fill: brand)[数量]]],
-    [#align(left)[#text(weight: "semibold", fill: brand)[金額]]],
+    // ヘッダー行（黒背景・白字・中央揃え）
+    [#text(weight: "semibold", fill: white)[品目]],
+    [#text(weight: "semibold", fill: white)[単価]],
+    [#text(weight: "semibold", fill: white)[数量]],
+    [#text(weight: "semibold", fill: white)[金額]],
 
     // 明細データ行を展開
     ..items.map(item => (
