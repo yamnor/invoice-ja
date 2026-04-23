@@ -1,6 +1,6 @@
 # invoice-ja
 
-A Typst template for generating Japanese estimates, invoices, and delivery notes. Multiple document types can be combined into a single PDF.
+A Typst template for generating Japanese estimates, invoices, and delivery notes.
 
 Typst で日本語の **見積書 / 請求書 / 納品書** を作成できるテンプレートです。  
 
