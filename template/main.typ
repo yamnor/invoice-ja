@@ -1,6 +1,7 @@
 #import "@local/invoice-ja:0.1.0": invoice_ja
 
 #show: invoice_ja(
+  // 複数種別を一度に出す例: ("見積書", "請求書", "納品書")
   "請求書",
   (
     name: "サンプル商事株式会社",

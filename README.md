@@ -1,6 +1,6 @@
 # invoice-ja
 
-A Typst template for generating Japanese estimates, invoices, and delivery notes.
+A Typst template for generating Japanese estimates, invoices, and delivery notes. Multiple document types can be combined into a single PDF.
 
 Typst で日本語の **見積書 / 請求書 / 納品書** を作成できるテンプレートです。  
 
@@ -9,6 +9,7 @@ Typst で日本語の **見積書 / 請求書 / 納品書** を作成できる�
 ## できること
 
 - 1つのテンプレートで書類種別を切り替え（`見積書` / `請求書` / `納品書`）
+- `doc_type` に配列を渡すと、複数種別を **1つのPDF** に連続出力
 - 明細から小計・消費税・合計を自動計算
 - 発行元・宛先・振込先・備考をパラメータで差し替え
 
@@ -91,14 +92,14 @@ cd invoice-ja
 
 4. `main.typ` の `#show: invoice_ja(...)` の引数を、自分の内容に合わせて書き換える。
 
-- `doc_type` - 書類種別（`"見積書"` / `"請求書"` / `"納品書"`）
+- `doc_type` - 書類種別。1枚なら `"見積書"` などの文字列。複数なら `("見積書", "請求書", "納品書")` のように配列
 - `recipient` - 宛先情報
 - `issue_date` - 発行日
 - `items` - 明細（品目・単価・数量）
 - `issuer` - 発行元情報
 - `bank` - 振込先情報（請求書で利用）
 - `remarks` - 備考（任意）
-- `document_number` - 書類番号（任意）
+- `document_number` - 書類番号（任意）。複数種別のときは `none`（種別ごと自動）か、種別の数と同じ長さの配列
 
 5. PDF にする。
 
@@ -131,6 +132,12 @@ typst compile main.typ
 )
 ```
 
+## 複数種別を1つのPDFに出力する
+
+`doc_type` に文字列の配列を渡すと、同じ宛先・明細・発行元などの内容で **種類だけ変えた複数枚** を、ページ区切り付きで1本にまとめられます。
+
+`document_number` は、複数種別のとき **`none`** にすると種別ごとに接頭辞＋日付で自動採番します。手で振る場合は、種別の枚数と同じ要素数の配列を渡してください。
+
 ## `invoice_ja` 関数のシグネチャ
 
 ```typst
@@ -147,7 +154,7 @@ typst compile main.typ
 )
 ```
 
-- `doc_type`: `"見積書"` / `"請求書"` / `"納品書"`
+- `doc_type`: 1枚なら `"見積書"` / `"請求書"` / `"納品書"` のいずれか。複数枚ならその文字列の配列
 - `recipient`: `(name, honorific, address)`。`address` は `none` で省略可。
 - `issue_date`: `datetime(...)`
 - `items`: `((name, price, qty), ...)`
@@ -158,7 +165,7 @@ typst compile main.typ
   - `custom` を **辞書に含め、かつ `none` でない content** にすると、差出しボックス内はその内容だけを表示する（登録番号・電話・独自ブロックなど、固定フィールドでは足りないとき用）。
 - `bank`: `(bank_name, branch_name, account_type, account_number, account_name)` または `none`
 - `remarks`: 備考。`none` で非表示
-- `document_number`: 文字列。`none` の場合は日付ベースで自動採番
+- `document_number`: 1枚のみのときは文字列。`none` の場合は日付ベースで自動採番。複数種別のときは `none` か、種別の枚数と同じ長さの配列（要素は文字列または `none`）
 
 ## 書類種別ごとの違い
 

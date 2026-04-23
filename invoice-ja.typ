@@ -70,8 +70,8 @@
   }
 }
 
-// テンプレート関数（`invoice-ja(...)` は減算と解釈されるため識別子は `invoice_ja`）
-#let invoice_ja(
+// 1 種類ぶんの本文（ページ設定は `invoice_ja` 側で一度だけ行う）
+#let invoice_ja_one(
   doc_type,
   recipient,
   issue_date,
@@ -91,10 +91,6 @@
   document_number: none,
 ) = {
   let cfg = document-config(doc_type)
-
-  // ページ設定 (A4)
-  set page(paper: "a4", margin: 2.5cm)
-  set text(font: font-sans, size: 11pt)
 
   // タイトル
   align(center)[
@@ -250,4 +246,78 @@
       #text(size: 10.5pt, weight: "semibold")[#bank.account_name]
     ]
   ]
+}
+
+// テンプレート関数（`invoice-ja(...)` は減算と解釈されるため識別子は `invoice_ja`）
+// `doc_type` に文字列を1つ渡すと従来どおり1枚。配列を渡すと同じ内容で複数種別を連続出力する。
+#let invoice_ja(
+  doc_type,
+  recipient,
+  issue_date,
+  items,
+  tax_rate: 0.1,
+  issuer: (
+    label: "販売元",
+    company: "サンプル株式会社",
+    name: none,
+    postal_code: none,
+    address: none,
+    custom: none,
+  ),
+  bank: none,
+  remarks: none,
+  document_number: none,
+) = {
+  let doc_type_order = ("見積書", "請求書", "納品書")
+  let doc-types = if type(doc_type) == str {
+    (doc_type,)
+  } else {
+    let raw = doc_type
+    let known = doc_type_order.filter(d => d in raw)
+    let other = raw.filter(d => d not in doc_type_order)
+    known + other
+  }
+  let n = doc-types.len()
+  assert(n >= 1, message: "doc_type には少なくとも1つの書類種別を指定してください。")
+
+  if document_number != none and type(document_number) == array {
+    assert(
+      document_number.len() == n,
+      message: "document_number を配列で渡すときは、要素数を書類種別の数（" + str(n) + "）と一致させてください。",
+    )
+  }
+  if document_number != none and type(document_number) == str {
+    assert(
+      n == 1,
+      message: "document_number に文字列を1つだけ渡すときは、書類種別は1種類にしてください。複数種別では `none`（種類ごと自動）か、種別と同じ長さの配列を渡してください。",
+    )
+  }
+
+  // ページ設定 (A4) — ドキュメント全体で一度
+  set page(paper: "a4", margin: 2.5cm)
+  set text(font: font-sans, size: 11pt)
+
+  for i in range(n) {
+    if i > 0 {
+      pagebreak()
+    }
+    let num = if document_number == none {
+      none
+    } else if type(document_number) == str {
+      document_number
+    } else {
+      document_number.at(i)
+    }
+    invoice_ja_one(
+      doc-types.at(i),
+      recipient,
+      issue_date,
+      items,
+      tax_rate: tax_rate,
+      issuer: issuer,
+      bank: bank,
+      remarks: remarks,
+      document_number: num,
+    )
+  }
 }
