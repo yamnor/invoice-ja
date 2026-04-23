@@ -47,7 +47,7 @@
     (
       title: "納品書",
       intro: "下記の通り納品いたしました。",
-      amount-label: "納品合計（税込）",
+      amount-label: "納品合計（税抜）",
       date-label: "納品日",
       no-label: "納品書番号",
       no-prefix: "DEL-",
